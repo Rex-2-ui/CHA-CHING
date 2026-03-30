@@ -51,16 +51,11 @@ body {
     gap: 20px;
     margin-top: 80px;
 }
-.mainlogo{
-  padding-top: 20px;
-  height: auto;
-  background-color: transparent;
-  margin-top: 20px;
-}
+
 
 
 .logo {
-    font-size: 13px;
+    font-size: 18px;
     color: #f59e0b;
     font-weight: bold;
 }
