@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="analytics.css">
+    <link rel="shortcut icon" href="imgs/logo.ico">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Analytics - CHA-CHING</title>
+</head>
+<body>
+    <div class="layout">
+
+      <!-- MOBILE TOP BAR -->
+      <div class="mobile_topbar">
+        <button class="hamburger" onclick="toggleDrawer()"><i data-lucide="menu"></i></button>
+        <span class="mobile_logo">🎓 CHA-CHING</span>
+        <a href="login.html" class="mobile_logout_btn" onclick="navigate(event,'login.html')"><i data-lucide="log-out"></i></a>
+      </div>
+ 
+      <!-- DRAWER OVERLAY -->
+      <div class="drawer_overlay" id="drawer_overlay" onclick="toggleDrawer()"></div>
+ 
+      <!-- SLIDE-IN DRAWER -->
+      <div class="drawer" id="drawer">
+        <div class="sidebar_logo">🎓 CHA-CHING</div>
+        <div class="sidebar_user">
+          <div class="user_avatar">G</div>
+          <div><p class="user_name">Guest</p><p class="user_status">Active session</p></div>
+        </div>
+        <p class="menu_label">MENU</p>
+        <nav class="sidebar_nav">
+          <a href="dashboard.html" class="nav_item" onclick="navigate(event,'dashboard.html')">
+            <i data-lucide="layout-dashboard"></i>
+            <div><p>Dashboard</p><span>Overview</span></div>
+          </a>
+          <a href="expenses.html" class="nav_item" onclick="navigate(event,'expenses.html')">
+            <i data-lucide="receipt-cent"></i>
+            <div><p>Expenses</p><span>Track spending</span></div>
+          </a>
+          <a href="analytics.html" class="nav_item active" onclick="navigate(event,'analytics.html')">
+            <i data-lucide="bar-chart-2"></i>
+            <div class="nav_indicator"></div>
+            <div><p>Analytics</p><span>Visual breakdown</span></div>
+          </a>
+          <a href="tips.html" class="nav_item" onclick="navigate(event,'tips.html')">
+            <i data-lucide="lightbulb"></i>
+            <div><p>Tips</p><span>Budget advice</span></div>
+          </a>
+        </nav>
+
+        <a href="login.html" class="logout" onclick="navigate(event,'login.html')">
+          <i data-lucide="log-out"></i><p>Log Out</p>
+        </a>
+      </div>
+
+
+        <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar_logo">🎓 CHA-CHING</div>
+
+        <div class="sidebar_user">
+          <div class="user_avatar">G</div>
+          <div>
+            <p class="user_name">Guest</p>
+            <p class="user_status">Active session</p>
+          </div>
+        </div>
+
+        <p class="menu_label">MENU</p>
+
+        <nav class="sidebar_nav">
+          <a href="dashboard.html" class="nav_item" data-page="dashboard" onclick="navigate(event,'dashboard.html')">
+            <i data-lucide="layout-dashboard"></i>
+            <div>              
+              <p>Dashboard</p>
+              <span>Overview</span>            
+            </div>            
+          </a>
+          <a href="expenses.html" class="nav_item" data-page="expenses" onclick="navigate(event,'expenses.html')">
+            <i data-lucide="receipt-cent"></i>
+            <div>
+              <p>Expenses</p>
+              <span>Track spending</span>
+            </div>
+          </a>
+          <a href="analytics.html" class="nav_item active" data-page="analytics" onclick="navigate(event,'analytics.html')">
+            <i data-lucide="bar-chart-2"></i>
+            <div>
+              <p>Analytics</p>
+              <span>Visual breakdown</span>
+            </div>
+            <div class="nav_indicator"></div>
+          </a>
+          <a href="tips.html" class="nav_item" data-page="tips" onclick="navigate(event,'tips.html')">
+            <i data-lucide="lightbulb"></i>
+            <div>
+              <p>Tips</p>
+              <span>Budget advice</span>
+            </div>
+          </a>
+        </nav>
+
+        <div class="budget_health">
+          <div class="budget_health_title">
+            BUDGET HEALTH <span id="bh_status">— Not Set</span>
+          </div>
+          <div id="bh_bar_wrap" style="display:none" class="bh_bar_wrap">
+            <div class="bh_bar_bg">
+              <div id="bh_bar_fill" class="bh_bar_fill"></div>
+            </div>
+          </div>
+          <p class="budget_health_sub" id="bh_sub">Set your allowance to track health</p>
+        </div>
+
+        <a href="login.html" class="logout" onclick="navigate(event,'login.html')">
+          <i data-lucide="log-out"></i>
+          <p>Log Out</p>
+        </a>
+
+        <p class="sidebar_footer">Built for students 🎓</p>
+      </aside>
+
+      <!--MAIN CONTENT-->
+      <main>
+        <div id="page_analytics" class="page">
+          <div class="page_inner"> 
+          <div class="page_header">
+            <div>
+              <h1 class="page_title">Analytics</h1>
+              <p class="page_sub">Visual breakdown of your spending patterns</p>
+            </div>
+          </div>
+
+          <div id="empty_state" class="empty_card">
+            <div class="no_expenses_icon">
+              <i data-lucide="bar-chart-2"></i>
+            </div>
+            <p class="no_expenses_title">No data to display</p>
+            <p class="no_expenses_sub">
+              Add expenses to see your spending analytics
+            </p>
+          </div>
+
+           <!-- ANALYTICS CONTENT (hidden until expenses exist) -->
+            <div id="analytics_content" style="display:none">
+ 
+              <!-- STAT MINI-CARDS -->
+              <div class="mini_stats">
+                <div class="mini_card">
+                  <p class="mini_label">TRANSACTIONS</p>
+                  <p class="mini_value blue" id="stat_transactions">0</p>
+                  <p class="mini_sub">recorded</p>
+                </div>
+                <div class="mini_card">
+                  <p class="mini_label">AVG / EXPENSE</p>
+                  <p class="mini_value orange" id="stat_avg">₵0</p>
+                  <p class="mini_sub">per entry</p>
+                </div>
+                <div class="mini_card">
+                  <p class="mini_label">DAILY BUDGET</p>
+                  <p class="mini_value teal" id="stat_daily">₵0</p>
+                  <p class="mini_sub">per day</p>
+                </div>
+                <div class="mini_card">
+                  <p class="mini_label">CATEGORIES</p>
+                  <p class="mini_value blue" id="stat_categories">0</p>
+                  <p class="mini_sub">active</p>
+                </div>
+              </div>
+ 
+              <!-- SPENDING OVERVIEW (Pie Chart) -->
+              <div class="analytics_card">
+                <h2 class="card_title">Spending Overview</h2>
+                <p class="card_sub">Visual breakdown of your expenses by category</p>
+                <div class="chart_wrap">
+                  <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart_legend" id="chart_legend"></div>
+                <h2 class="card_title">Spending by Category</h2>
+                <div id="category_rows"></div>
+              </div>
+ 
+              <!-- SPENDING BY CATEGORY (list)
+              <div class="analytics_card">
+                <h2 class="card_title">Spending by Category</h2>
+                <div id="category_rows"></div>
+              </div> -->
+ 
+              <!-- SPENDING INSIGHTS -->
+              <div class="analytics_card">
+                <h2 class="card_title">Spending Insights</h2>
+                <div class="insights_grid">
+                  <div class="insight_card insight_purple">
+                    <div class="insight_icon">🍔</div>
+                    <div>
+                      <p class="insight_label">TOP CATEGORY</p>
+                      <p class="insight_value" id="insight_top_cat">—</p>
+                      <p class="insight_amount purple" id="insight_top_amt">₵0.00</p>
+                    </div>
+                  </div>
+                  <div class="insight_card insight_yellow">
+                    <div class="insight_icon">📈</div>
+                    <div>
+                      <p class="insight_label">BUDGET STATUS</p>
+                      <p class="insight_value" id="insight_status">—</p>
+                      <p class="insight_amount orange" id="insight_status_sub">0% used</p>
+                    </div>
+                  </div>
+                  <div class="insight_card insight_blue">
+                    <div class="insight_icon">🏅</div>
+                    <div>
+                      <p class="insight_label" id="insight_period_label">MONTHLY REMAINING</p>
+                      <p class="insight_value blue" id="insight_remaining">₵0.00</p>
+                      <p class="insight_amount gray">available to save</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+ 
+            </div>
+            <!-- end analytics_content -->
+ 
+          </div> 
+        </div>
+      </main>
+
+       <!-- MOBILE BOTTOM TAB BAR -->
+      <nav class="mobile_bottom_nav">
+        <a href="dashboard.html" class="tab_item" onclick="navigate(event,'dashboard.html')">
+          <i data-lucide="layout-dashboard"></i><span>Home</span>
+        </a>
+        <a href="expenses.html" class="tab_item" onclick="navigate(event,'expenses.html')">
+          <i data-lucide="receipt-cent"></i><span>Expenses</span>
+        </a>
+        <a href="analytics.html" class="tab_item active" onclick="navigate(event,'analytics.html')">
+          <i data-lucide="bar-chart-2"></i><span>Analytics</span>
+        </a>
+        <a href="tips.html" class="tab_item" onclick="navigate(event,'tips.html')">
+          <i data-lucide="lightbulb"></i><span>Tips</span>
+        </a>
+      </nav>
+
+    </div>
+    <script>
+        lucide.createIcons();
+
+         // ── Same-tab navigation ──
+      function navigate(e, url) {
+        e.preventDefault();
+        window.location.href = url;
+      }
+
+       function toggleDrawer() {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('drawer_overlay').classList.toggle('open');
+      }
+
+ 
+      // ── Read localStorage ──
+      const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+      const budget   = parseFloat(localStorage.getItem('budget')) || 0;
+      const period   = localStorage.getItem('period') || 'monthly';
+ 
+      const COLORS = {
+        Food:'#6366f1', 
+        Transport:'#22c55e', 
+        Entertainment:'#f59e0b',
+        Education:'#3b82f6', 
+        Housing:'#8b5cf6', 
+        Health:'#ec4899',
+        Clothing:'#f97316', 
+        Other:'#6b7280'
+      };
+ 
+      // ── Sidebar budget health ──
+      function updateSidebar() {
+        if (!budget) return;
+        const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+        const pct   = Math.min((totalSpent / budget) * 100, 100);
+        const color = pct >= 90 ? '#ef4444' : pct >= 75 ? '#f59e0b' : '#22c55e';
+        const label = pct >= 90 ? 'Critical' : pct >= 75 ? 'Near Limit' : 'Healthy';
+        
+        document.getElementById('bh_status').textContent    = `— ${label}`;
+        document.getElementById('bh_status').style.color   = color;
+        document.getElementById('bh_bar_wrap').style.display = 'block';
+        document.getElementById('bh_bar_fill').style.width      = `${pct}%`;
+        document.getElementById('bh_bar_fill').style.background = color;
+        document.getElementById('bh_sub').textContent =
+          `₵${totalSpent.toFixed(2)} spent · ₵${budget.toFixed(2)} total`;
+      }
+ 
+      // ── Main render ──
+      function renderAnalytics() {
+        if (expenses.length === 0) {
+          document.getElementById('empty_state').style.display    = 'flex';
+          document.getElementById('analytics_content').style.display = 'none';
+          return;
+        }
+ 
+        document.getElementById('empty_state').style.display    = 'none';
+        document.getElementById('analytics_content').style.display = 'block';
+ 
+        const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+        const remaining  = Math.max(budget - totalSpent, 0);
+        const pct        = budget > 0 ? (totalSpent / budget) * 100 : 0;
+ 
+        // ── Category totals ──
+        const cats = {};
+        expenses.forEach(e => {
+          if (!cats[e.category]) cats[e.category] = { amount: 0, emoji: e.categoryFull?.split(' ')[0] || '📦' };
+          cats[e.category].amount += e.amount;
+        });
+        const sortedCats = Object.entries(cats).sort((a, b) => b[1].amount - a[1].amount);
+        const daysInPeriod = period === 'weekly' ? 7 : 30;
+ 
+        // ── Mini stat cards ──
+        document.getElementById('stat_transactions').textContent = expenses.length;
+        document.getElementById('stat_avg').textContent          = `₵${(totalSpent / expenses.length).toFixed(0)}`;
+        document.getElementById('stat_daily').textContent        = budget > 0 ? `₵${(budget / daysInPeriod).toFixed(0)}` : '—';
+        document.getElementById('stat_categories').textContent   = sortedCats.length;
+ 
+        // ── Pie chart ──
+        const pieLabels = sortedCats.map(([cat]) => cat);
+        const pieData   = sortedCats.map(([, d]) => d.amount);
+        const pieColors = sortedCats.map(([cat]) => COLORS[cat] || '#6b7280');
+ 
+        // Add "Remaining" slice if budget set and under budget
+        if (budget > 0 && remaining > 0) {
+          pieLabels.push('Remaining');
+          pieData.push(remaining);
+          pieColors.push('#3b82f6');
+        }
+ 
+        const ctx = document.getElementById('pieChart').getContext('2d');
+        if (window._pieChart) window._pieChart.destroy();
+        window._pieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: pieLabels,
+            datasets: [{
+              data: pieData,
+              backgroundColor: pieColors,
+              borderWidth: 2,
+              borderColor: '#fff'
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => {
+                    const val = ctx.parsed;
+                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                    return ` ₵${val.toFixed(2)} (${((val/total)*100).toFixed(1)}%)`;
+                  }
+                }
+              }
+            }
+          },
+          plugins: [{
+            id: 'percentLabels',
+            afterDatasetDraw(chart) {
+              const { ctx, data } = chart;
+              const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+              chart.getDatasetMeta(0).data.forEach((arc, i) => {
+                const pctVal = ((data.datasets[0].data[i] / total) * 100).toFixed(0);
+                if (pctVal < 5) return;
+                const { x, y } = arc.tooltipPosition();
+                ctx.save();
+                ctx.font = 'bold 13px Segoe UI';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${pctVal}%`, x, y);
+                ctx.restore();
+              });
+            }
+          }]
+        });
+ 
+        // ── Legend ──
+        const legendEl = document.getElementById('chart_legend');
+        legendEl.innerHTML = pieLabels.map((label, i) => `
+          <div class="legend_item">
+            <span class="legend_dot" style="background:${pieColors[i]}"></span>
+            <span class="legend_label">${sortedCats[i]?.[1]?.emoji || '💰'} ${label}</span>
+          </div>`).join('');
+ 
+        // ── Category rows ──
+        const catRowsEl = document.getElementById('category_rows');
+        catRowsEl.innerHTML = sortedCats.map(([cat, data]) => {
+          const catPct  = totalSpent > 0 ? ((data.amount / totalSpent) * 100).toFixed(1) : 0;
+          const color   = COLORS[cat] || '#6b7280';
+          return `
+            <div class="cat_row">
+              <div class="cat_row_left">
+                <span class="cat_dot" style="background:${color}"></span>
+                <span class="cat_emoji">${data.emoji}</span>
+                <span class="cat_name">${cat}</span>
+              </div>
+              <div class="cat_row_right">
+                <span class="cat_amount" style="color:${color}">₵${data.amount.toFixed(2)}</span>
+                <span class="cat_pct">(${catPct}%)</span>
+              </div>
+            </div>`;
+        }).join('');
+ 
+        // ── Insights ──
+        const topCat    = sortedCats[0];
+        const statusLbl = pct >= 100 ? 'Over Budget' : pct >= 75 ? 'Near Limit' : pct >= 50 ? 'On Track' : 'Great Shape';
+        const periodLabel = period.charAt(0).toUpperCase() + period.slice(1);
+ 
+        document.getElementById('insight_top_cat').textContent   = topCat ? topCat[0] : '—';
+        document.querySelector('.insight_card.insight_purple .insight_icon').textContent = topCat?.[1]?.emoji || '📦';
+        document.getElementById('insight_top_amt').textContent   = topCat ? `₵${topCat[1].amount.toFixed(2)}` : '₵0.00';
+        document.getElementById('insight_status').textContent    = statusLbl;
+        document.getElementById('insight_status_sub').textContent = `${pct.toFixed(1)}% used`;
+        document.getElementById('insight_period_label').textContent = `${periodLabel.toUpperCase()} REMAINING`;
+        document.getElementById('insight_remaining').textContent  = `₵${remaining.toFixed(2)}`;
+ 
+        // colour the status insight
+        const statusColor = pct >= 100 ? '#ef4444' : pct >= 75 ? '#f59e0b' : '#22c55e';
+        document.getElementById('insight_status').style.color = statusColor;
+      }
+ 
+      updateSidebar();
+      renderAnalytics();
+    </script>
+</body>
+</html>

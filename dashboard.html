@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="shortcut icon" href="imgs/logo.ico" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Home - CHA-CHING</title>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- MOBILE TOP BAR -->
+      <div class="mobile_topbar">
+        <button class="hamburger" onclick="toggleDrawer()">
+          <i data-lucide="menu"></i>
+        </button>
+        <span class="mobile_logo">🎓 CHA-CHING</span>
+        <a
+          href="login.html"
+          class="mobile_logout_btn"
+          onclick="navigate(event, 'login.html')"
+          ><i data-lucide="log-out"></i
+        ></a>
+      </div>
+
+      <!-- DRAWER OVERLAY -->
+      <div
+        class="drawer_overlay"
+        id="drawer_overlay"
+        onclick="toggleDrawer()"
+      ></div>
+
+      <!-- SLIDE-IN DRAWER -->
+      <div class="drawer" id="drawer">
+        <div class="sidebar_logo">🎓 CHA-CHING</div>
+        <div class="sidebar_user">
+          <div class="user_avatar">G</div>
+          <div>
+            <p class="user_name">Guest</p>
+            <p class="user_status">Active session</p>
+          </div>
+        </div>
+        <p class="menu_label">MENU</p>
+        <nav class="sidebar_nav">
+          <a
+            href="dashboard.html"
+            class="nav_item active"
+            onclick="navigate(event, 'dashboard.html')"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            <div>
+              <p>Dashboard</p>
+              <span>Overview</span>
+            </div>
+            <div class="nav_indicator"></div>
+          </a>
+          <a
+            href="expenses.html"
+            class="nav_item"
+            onclick="navigate(event, 'expenses.html')"
+          >
+            <i data-lucide="receipt-cent"></i>
+            <div>
+              <p>Expenses</p>
+              <span>Track spending</span>
+            </div>
+          </a>
+          <a
+            href="analytics.html"
+            class="nav_item"
+            onclick="navigate(event, 'analytics.html')"
+          >
+            <i data-lucide="bar-chart-2"></i>
+            <div>
+              <p>Analytics</p>
+              <span>Visual breakdown</span>
+            </div>
+          </a>
+          <a
+            href="tips.html"
+            class="nav_item"
+            onclick="navigate(event, 'tips.html')"
+          >
+            <i data-lucide="lightbulb"></i>
+            <div>
+              <p>Tips</p>
+              <span>Budget advice</span>
+            </div>
+          </a>
+        </nav>
+
+        <a
+          href="login.html"
+          class="logout"
+          onclick="navigate(event, 'login.html')"
+        >
+          <i data-lucide="log-out"></i>
+          <p>Log Out</p>
+        </a>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar_logo">🎓 CHA-CHING</div>
+
+        <div class="sidebar_user">
+          <div class="user_avatar">G</div>
+          <div>
+            <p class="user_name">Guest</p>
+            <p class="user_status">Active session</p>
+          </div>
+        </div>
+
+        <p class="menu_label">MENU</p>
+
+        <nav class="sidebar_nav">
+          <a
+            href="dashboard.html"
+            class="nav_item active"
+            data-page="dashboard"
+            onclick="navigate(event, 'dashboard.html')"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            <div>
+              <p>Dashboard</p>
+              <span>Overview</span>
+            </div>
+            <div class="nav_indicator"></div>
+          </a>
+          <a
+            href="expenses.html"
+            class="nav_item"
+            data-page="expenses"
+            onclick="navigate(event, 'expenses.html')"
+          >
+            <i data-lucide="receipt-cent"></i>
+            <div>
+              <p>Expenses</p>
+              <span>Track spending</span>
+            </div>
+          </a>
+          <a
+            href="analytics.html"
+            class="nav_item"
+            data-page="analytics"
+            onclick="navigate(event, 'analytics.html')"
+          >
+            <i data-lucide="bar-chart-2"></i>
+            <div>
+              <p>Analytics</p>
+              <span>Visual breakdown</span>
+            </div>
+          </a>
+          <a
+            href="tips.html"
+            class="nav_item"
+            data-page="tips"
+            onclick="navigate(event, 'tips.html')"
+          >
+            <i data-lucide="lightbulb"></i>
+            <div>
+              <p>Tips</p>
+              <span>Budget advice</span>
+            </div>
+          </a>
+        </nav>
+
+        <div class="budget_health">
+          <div class="budget_health_title">
+            BUDGET HEALTH <span id="bh_status">— Not Set</span>
+          </div>
+          <!--Budget Health Bar Chart-->
+          <div id="bh_bar_wrap" style="display: none" class="bh_bar_wrap">
+            <div class="bh_bar_bg">
+              <div id="bh_bar_fill" class="bh_bar_fill"></div>
+            </div>
+          </div>
+          <p class="budget_health_sub" id="bh_sub">
+            Set your allowance to track health
+          </p>
+        </div>
+
+        <a
+          href="login.html"
+          class="logout"
+          onclick="navigate(event, 'login.html')"
+        >
+          <i data-lucide="log-out"></i>
+          <p>Log Out</p>
+        </a>
+
+        <p class="sidebar_footer">Built for students 🎓</p>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main>
+        <!-- DASHBOARD PAGE -->
+        <div id="page_dashboard" class="page">
+          <div class="page_inner">
+            <div class="hero">
+              <div class="hero_text">
+                <p id="date"></p>
+                <p class="hero_title">Good Afternoon, Student! 👋</p>
+                <p class="hero_sub">
+                  Set up your budget to start smart financial tracking
+                </p>
+
+                <!-- HERO PROGRESS (inside hero, hidden by default) -->
+                <div
+                  id="hero_progress_wrap"
+                  style="display: none"
+                  class="hero_progress_wrap"
+                >
+                  <div class="hero_progress_bg">
+                    <div id="hero_progress_bar" class="hero_progress_bar"></div>
+                  </div>
+                  <span
+                    id="hero_progress_label"
+                    class="hero_progress_label"
+                  ></span>
+                </div>
+
+                <div class="hero_buttons">
+                  <button class="hero_cta">Set Up Budget ➔</button>
+                  <button class="hero_reset">↺ Reset</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" id="setup_card">
+              <h3 class="card_title">🏦 Set Your Allowance</h3>
+              <div class="field">
+                <label>Budget Amount (₵)</label>
+                <input type="number" placeholder="e.g. 500.00" required />
+              </div>
+              <div class="field">
+                <label>Period</label>
+                <div class="toggle_row">
+                  <button
+                    class="toggle_btn"
+                    onclick="setPeriod('weekly', this)"
+                  >
+                    Weekly
+                  </button>
+                  <button
+                    class="toggle_btn active"
+                    onclick="setPeriod('monthly', this)"
+                  >
+                    Monthly
+                  </button>
+                </div>
+              </div>
+              <button class="submit_btn">Set Allowance</button>
+            </div>
+
+            <div class="card card_hint" id="hint_card">
+              <div class="hint_icon">⏱</div>
+              <div>
+                <h3>Set Your Budget</h3>
+                <p>
+                  Enter your allowance below to start tracking your finances.
+                </p>
+              </div>
+            </div>
+
+            <!-- STAT CARDS (hidden by default) -->
+            <div id="stats_cards" style="display: none" class="stats_cards">
+              <div class="stat_card stat_blue">
+                <div class="stat_top">
+                  <p id="stat_budget_label" class="stat_label">WEEKLY BUDGET</p>
+                  <div class="stat_icon"><i data-lucide="wallet"></i></div>
+                </div>
+                <p id="stat_budget_amount" class="stat_amount">₵0.00</p>
+                <p id="stat_budget_sub" class="stat_sub">
+                  Total weekly allowance
+                </p>
+              </div>
+              <div class="stat_card stat_orange">
+                <div class="stat_top">
+                  <p class="stat_label">TOTAL SPENT</p>
+                  <div class="stat_icon">
+                    <i data-lucide="trending-down"></i>
+                  </div>
+                </div>
+                <p id="stat_spent_amount" class="stat_amount">₵0.00</p>
+                <p id="stat_spent_sub" class="stat_sub">0% of allowance used</p>
+              </div>
+              <div class="stat_card stat_teal">
+                <div class="stat_top">
+                  <p class="stat_label">REMAINING</p>
+                  <div class="stat_icon"><i data-lucide="trending-up"></i></div>
+                </div>
+                <p id="stat_remaining_amount" class="stat_amount">₵0.00</p>
+                <p id="stat_remaining_sub" class="stat_sub">100% remaining</p>
+              </div>
+            </div>
+
+            <!-- BUDGET ALERT (hidden by default) -->
+            <div
+              id="budget_alert"
+              style="display: none"
+              class="budget_alert alert_success"
+            ></div>
+
+            <!-- SPENDING BY CATEGORY (hidden by default) -->
+            <div id="spending_by_category" style="display: none" class="card">
+              <div class="cat_header_row">
+                <h3>Spending by Category</h3>
+                <a
+                  href="analytics.html"
+                  onclick="navigate(event, 'analytics.html')"
+                  >Full Analytics →</a
+                >
+              </div>
+              <div id="category_list"></div>
+            </div>
+            <div class="bottom_grid">
+              <div class="quick_add">
+                <div class="quick_add_header" onclick="toggleExpense()">
+                  <div class="quick_add_left">
+                    <div class="quick_add_icon">+</div>
+                    <div>
+                      <h3>Quick Add Expense</h3>
+                      <p>Log a new spending entry</p>
+                    </div>
+                  </div>
+                  <button class="chevron" id="chevron">&#8964;</button>
+                </div>
+                <div
+                  class="quick_add_form"
+                  id="quick_add_form"
+                  style="display: none"
+                >
+                  <div class="form_row">
+                    <div class="field">
+                      <label>Category</label>
+                      <select class="input_wrap">
+                        <option>🍔 Food</option>
+                        <option>🚌 Transport</option>
+                        <option>🎮 Entertainment</option>
+                        <option>📚 Education</option>
+                        <option>🏠 Housing</option>
+                        <option>💊 Health</option>
+                        <option>👗 Clothing</option>
+                        <option>📦 Other</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label>Amount (₵)</label>
+                      <input
+                        class="input_wrap"
+                        type="number"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Description (optional)</label>
+                    <input
+                      class="input_wrap"
+                      type="text"
+                      placeholder="e.g. Lunch at cafeteria"
+                    />
+                  </div>
+                  <button class="add_expense_btn">+ Add Expense</button>
+                </div>
+              </div>
+
+              <div class="recent_expenses">
+                <div class="recent_header">
+                  <h3>Recent Expenses</h3>
+                  <a
+                    href="expenses.html"
+                    onclick="navigate(event, 'expenses.html')"
+                    >View All →</a
+                  >
+                </div>
+                <div id="recent_list"></div>
+                <div class="no_expenses" id="no_expenses_placeholder">
+                  <div class="no_expenses_icon">🧾</div>
+                  <p class="no_expenses_title">No expenses yet</p>
+                  <p class="no_expenses_sub">Add your first expense above</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- MOBILE BOTTOM TAB BAR -->
+      <nav class="mobile_bottom_nav">
+        <a
+          href="dashboard.html"
+          class="tab_item active"
+          onclick="navigate(event, 'dashboard.html')"
+        >
+          <i data-lucide="layout-dashboard"></i><span>Home</span>
+        </a>
+        <a
+          href="expenses.html"
+          class="tab_item"
+          onclick="navigate(event, 'expenses.html')"
+        >
+          <i data-lucide="receipt-cent"></i><span>Expenses</span>
+        </a>
+        <a
+          href="analytics.html"
+          class="tab_item"
+          onclick="navigate(event, 'analytics.html')"
+        >
+          <i data-lucide="bar-chart-2"></i><span>Analytics</span>
+        </a>
+        <a
+          href="tips.html"
+          class="tab_item"
+          onclick="navigate(event, 'tips.html')"
+        >
+          <i data-lucide="lightbulb"></i><span>Tips</span>
+        </a>
+      </nav>
+    </div>
+    <script>
+      lucide.createIcons();
+
+      // ── Force same-tab navigation ──
+      function navigate(e, url) {
+        e.preventDefault();
+        window.location.href = url;
+      }
+
+      function toggleDrawer() {
+        document.getElementById("drawer").classList.toggle("open");
+        document.getElementById("drawer_overlay").classList.toggle("open");
+      }
+
+      // Date display
+      const dateEl = document.getElementById("date");
+      const now = new Date();
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      dateEl.textContent = now.toLocaleDateString("en-US", options);
+
+      // Greeting based on time
+      const hour = now.getHours();
+      let greeting = "";
+      let emoji = "";
+
+      if (hour >= 5 && hour < 12) {
+        greeting = "Good Morning";
+        emoji = "☀️";
+      } else if (hour >= 12 && hour < 17) {
+        greeting = "Good Afternoon";
+        emoji = "👋";
+      } else if (hour >= 17 && hour < 21) {
+        greeting = "Good Evening";
+        emoji = "👋";
+      } else {
+        greeting = "Good Night";
+        emoji = "🌙";
+      }
+      document.querySelector(".hero_title").textContent =
+        `${greeting}, Student! ${emoji}`;
+
+      // ─── LOAD STATE FROM STORAGE ───
+      let budget = parseFloat(localStorage.getItem("budget")) || 0;
+      let period = localStorage.getItem("period") || "monthly";
+      let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+      // Sync period toggle buttons on load
+      document.querySelectorAll(".toggle_btn").forEach((b) => {
+        b.classList.toggle(
+          "active",
+          b.textContent.trim().toLowerCase() === period,
+        );
+      });
+
+      // ─── PERIOD TOGGLE ───
+      function setPeriod(p, btn) {
+        period = p;
+        localStorage.setItem("period", p);
+        document
+          .querySelectorAll(".toggle_btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+      }
+
+      // ─── SET ALLOWANCE ───
+      document.querySelector(".submit_btn").addEventListener("click", () => {
+        const input = document.querySelector('.card input[type="number"]');
+        const val = parseFloat(input.value);
+        if (!val || val <= 0) return alert("Please enter a valid amount.");
+        budget = val;
+        localStorage.setItem("budget", budget);
+        localStorage.setItem("period", period);
+        updateDashboard();
+      });
+
+      // ─── ADD EXPENSE ───
+      document
+        .querySelector(".add_expense_btn")
+        .addEventListener("click", () => {
+          const category = document.querySelector(".quick_add select").value;
+          const amount = parseFloat(
+            document.querySelector('.quick_add input[type="number"]').value,
+          );
+          const desc = document.querySelector(
+            '.quick_add input[type="text"]',
+          ).value;
+
+          if (!amount || amount <= 0)
+            return alert("Please enter a valid amount.");
+          expenses.push({
+            category: category.replace(/^\S+\s/, ""), // strip emoji for storage
+            categoryFull: category,
+            amount,
+            desc: desc || "No description",
+            date: now.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            }),
+          });
+          localStorage.setItem("expenses", JSON.stringify(expenses));
+          // clear inputs
+          document.querySelector('.quick_add input[type="number"]').value = "";
+          document.querySelector('.quick_add input[type="text"]').value = "";
+          updateDashboard();
+        });
+
+      // ─── RESET ───
+      document.querySelector(".hero_reset").addEventListener("click", () => {
+        if (!confirm("Reset all data?")) return;
+        localStorage.clear();
+        budget = 0;
+        expenses = [];
+        period = "weekly";
+        document
+          .querySelectorAll(".toggle_btn")
+          .forEach((b, i) => b.classList.toggle("active", i === 0));
+        updateDashboard();
+      });
+
+      // ─── TOGGLE QUICK ADD FORM ───
+      function toggleExpense() {
+        const form = document.getElementById("quick_add_form");
+        const chevron = document.getElementById("chevron");
+        const isOpen = form.style.display !== "none";
+        form.style.display = isOpen ? "none" : "flex";
+        chevron.style.transform = isOpen ? "rotate(0deg)" : "rotate(180deg)";
+      }
+
+      // ── MAIN UPDATE ──
+      function updateDashboard() {
+        const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+        const remaining = budget - totalSpent;
+        const pct = budget > 0 ? (totalSpent / budget) * 100 : 0;
+        const periodLabel = period.charAt(0).toUpperCase() + period.slice(1);
+
+        if (budget > 0) {
+          // Hero text + progress
+          document.querySelector(".hero_sub").textContent =
+            `You have ₵${remaining.toFixed(2)} remaining from your ${period} budget`;
+
+          const progressWrap = document.getElementById("hero_progress_wrap");
+          const progressBar = document.getElementById("hero_progress_bar");
+          const progressLbl = document.getElementById("hero_progress_label");
+          progressWrap.style.display = "flex";
+          progressBar.style.width = `${Math.min(pct, 100)}%`;
+          progressBar.style.backgroundColor =
+            pct >= 90 ? "#ef4444" : pct >= 75 ? "#f59e0b" : "#22c55e";
+          progressLbl.textContent = `${pct.toFixed(1)}% used`;
+
+          // Hero button label
+          document.querySelector(".hero_cta").textContent = "⚙ Edit Budget";
+
+          // Hide setup cards
+          document.getElementById("setup_card").style.display = "none";
+          document.getElementById("hint_card").style.display = "none";
+
+          // Show stat cards
+          document.getElementById("stats_cards").style.display = "grid";
+          document.getElementById("budget_alert").style.display = "flex";
+          document.getElementById("spending_by_category").style.display =
+            expenses.length > 0 ? "block" : "none";
+
+          // Stat card values
+          document.getElementById("stat_budget_label").textContent =
+            `${periodLabel.toUpperCase()} BUDGET`;
+          document.getElementById("stat_budget_amount").textContent =
+            `₵${budget.toFixed(2)}`;
+          document.getElementById("stat_budget_sub").textContent =
+            `Total ${period} allowance`;
+          document.getElementById("stat_spent_amount").textContent =
+            `₵${totalSpent.toFixed(2)}`;
+          document.getElementById("stat_spent_sub").textContent =
+            `${pct.toFixed(1)}% of allowance used`;
+          document.getElementById("stat_remaining_amount").textContent =
+            `₵${Math.max(remaining, 0).toFixed(2)}`;
+          document.getElementById("stat_remaining_sub").textContent =
+            `${Math.max(100 - pct, 0).toFixed(1)}% remaining`;
+
+          // Alert banner
+          const alertEl = document.getElementById("budget_alert");
+          if (pct >= 100) {
+            alertEl.className = "budget_alert alert_danger";
+            alertEl.innerHTML = `<span>⚠</span><div><strong>Over Budget!</strong><p>You've exceeded your allowance by ₵${Math.abs(remaining).toFixed(2)}!</p></div>`;
+          } else if (pct >= 75) {
+            alertEl.className = "budget_alert alert_warning";
+            alertEl.innerHTML = `<span>⚠</span><div><strong>Warning: Near Limit</strong><p>You've used ${pct.toFixed(1)}% of your allowance. Only ₵${remaining.toFixed(2)} left — be careful!</p></div>`;
+          } else {
+            alertEl.className = "budget_alert alert_success";
+            alertEl.innerHTML = `<span>✔</span><div><strong>Great Job!</strong><p>Only ${pct.toFixed(1)}% spent so far. You have ₵${remaining.toFixed(2)} remaining. Excellent budgeting!</p></div>`;
+          }
+
+          // Sidebar budget health
+          const bhPct = Math.min(pct, 100);
+          const bhColor =
+            pct >= 90 ? "#ef4444" : pct >= 75 ? "#f59e0b" : "#22c55e";
+          const bhLabel =
+            pct >= 90 ? "Critical" : pct >= 75 ? "Near Limit" : "Healthy";
+          document.getElementById("bh_status").textContent = `— ${bhLabel}`;
+          document.getElementById("bh_status").style.color = bhColor;
+          document.getElementById("bh_bar_wrap").style.display = "block";
+          document.getElementById("bh_bar_fill").style.width = `${bhPct}%`;
+          document.getElementById("bh_bar_fill").style.background = bhColor;
+          document.getElementById("bh_sub").textContent =
+            `₵${totalSpent.toFixed(2)} spent · ₵${budget.toFixed(2)} total`;
+
+          lucide.createIcons();
+        } else {
+          // No budget — show setup UI
+          document.getElementById("setup_card").style.display = "flex";
+          document.getElementById("hint_card").style.display = "flex";
+          document.getElementById("stats_cards").style.display = "none";
+          document.getElementById("budget_alert").style.display = "none";
+          document.getElementById("hero_progress_wrap").style.display = "none";
+          document.getElementById("spending_by_category").style.display =
+            "none";
+          document.querySelector(".hero_sub").textContent =
+            "Set up your budget to start smart financial tracking";
+          document.querySelector(".hero_cta").textContent = "Set Up Budget ➔";
+          document.getElementById("bh_status").textContent = "— Not Set";
+          document.getElementById("bh_status").style.color = "";
+          document.getElementById("bh_bar_wrap").style.display = "none";
+          document.getElementById("bh_sub").textContent =
+            "Set your allowance to track health";
+        }
+
+        renderRecentExpenses();
+        if (expenses.length > 0) renderCategoryBreakdown();
+      }
+
+      // ─── RENDER RECENT EXPENSES ───
+      function renderRecentExpenses() {
+        const container = document.getElementById("recent_list");
+        const placeholder = document.getElementById("no_expenses_placeholder");
+        const recent = [...expenses].reverse().slice(0, 5);
+        if (recent.length === 0) {
+          container.innerHTML = "";
+          placeholder.style.display = "flex";
+          return;
+        }
+        placeholder.style.display = "none";
+        const colors = {
+          Food: "#6366f1",
+          Transport: "#22c55e",
+          Entertainment: "#f59e0b",
+          Education: "#3b82f6",
+          Housing: "#8b5cf6",
+          Health: "#ec4899",
+          Clothing: "#f97316",
+          Other: "#6b7280",
+        };
+        container.innerHTML = recent
+          .map(
+            (e, i) => `
+            <div class="expense_item">
+              <div class="expense_icon">${e.categoryFull.split(" ")[0]}</div>
+              <div class="expense_info">
+                <p class="expense_desc">${e.desc}</p>
+                <p class="expense_meta">${e.category} · ${e.date}</p>
+              </div>
+              <p class="expense_amount" style="color:${colors[e.category] || "#6b7280"}">
+                ₵${e.amount.toFixed(2)}
+              </p>
+              <button class="delete_btn" onclick="deleteExpense(${expenses.length - 1 - i})">🗑</button>
+            </div>`,
+          )
+          .join("");
+      }
+
+      // ─── DELETE EXPENSE ───
+      function deleteExpense(index) {
+        expenses.splice(index, 1);
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        updateDashboard();
+      }
+
+      // ─── SPENDING BY CATEGORY ───
+      function renderCategoryBreakdown() {
+        const container = document.getElementById("category_list");
+        const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+        const cats = {};
+        expenses.forEach((e) => {
+          if (!cats[e.category])
+            cats[e.category] = {
+              amount: 0,
+              emoji: e.categoryFull.split(" ")[0],
+            };
+          cats[e.category].amount += e.amount;
+        });
+        const colors = {
+          Food: "#6366f1",
+          Transport: "#22c55e",
+          Transportation: "#22c55e",
+          Entertainment: "#f59e0b",
+          Education: "#3b82f6",
+          Housing: "#8b5cf6",
+          Health: "#ec4899",
+          Clothing: "#f97316",
+          Other: "#6b7280",
+        };
+        container.innerHTML = Object.entries(cats)
+          .map(([cat, data]) => {
+            const pct = totalSpent > 0 ? (data.amount / totalSpent) * 100 : 0;
+            const color = colors[cat] || "#6b7280";
+            return `
+        <div class="cat_item">
+          <div class="cat_header">
+            <span>${data.emoji} ${cat}</span>
+            <span style="color:${color}">₵${data.amount.toFixed(2)} (${pct.toFixed(1)}%)</span>
+          </div>
+          <div class="cat_bar_bg">
+            <div class="cat_bar" style="width:${pct}%; background:${color}"></div>
+          </div>
+        </div>`;
+          })
+          .join("");
+      }
+
+      // ─── EDIT BUDGET ───
+      document.querySelector(".hero_cta").addEventListener("click", () => {
+        const setupCard = document.getElementById("setup_card");
+
+        setupCard.style.display = "flex";
+        document.getElementById("hint_card").style.display = "flex";
+
+        setupCard.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+
+        if (budget > 0) {
+          document.querySelector('#setup_card input[type="number"]').value =
+            budget;
+        }
+      });
+
+      // ─── INIT ───
+      updateDashboard();
+    </script>
+  </body>
+</html>

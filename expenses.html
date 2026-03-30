@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="expenses.css">
+    <link rel="shortcut icon" href="imgs/logo.ico">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Expenses - CHA-CHING</title>
+</head>
+<body>
+    <div class="layout">
+
+       <!-- MOBILE TOP BAR -->
+      <div class="mobile_topbar">
+        <button class="hamburger" onclick="toggleDrawer()"><i data-lucide="menu"></i></button>
+        <span class="mobile_logo">🎓 CHA-CHING</span>
+        <a href="login.html" class="mobile_logout_btn" onclick="navigate(event,'login.html')"><i data-lucide="log-out"></i></a>
+      </div>
+ 
+      <!-- DRAWER OVERLAY -->
+      <div class="drawer_overlay" id="drawer_overlay" onclick="toggleDrawer()"></div>
+ 
+      <!-- SLIDE-IN DRAWER -->
+      <div class="drawer" id="drawer">
+        <div class="sidebar_logo">🎓 CHA-CHING</div>
+        <div class="sidebar_user">
+          <div class="user_avatar">G</div>
+          <div><p class="user_name">Guest</p><p class="user_status">Active session</p></div>
+        </div>
+        <p class="menu_label">MENU</p>
+        <nav class="sidebar_nav">
+          <a href="dashboard.html" class="nav_item" onclick="navigate(event,'dashboard.html')">
+            <i data-lucide="layout-dashboard"></i><div><p>Dashboard</p><span>Overview</span></div>
+          </a>
+          <a href="expenses.html" class="nav_item active" onclick="navigate(event,'expenses.html')">
+            <i data-lucide="receipt-cent"></i><div><p>Expenses</p><span>Track spending</span></div>
+            <div class="nav_indicator"></div>
+          </a>
+          <a href="analytics.html" class="nav_item" onclick="navigate(event,'analytics.html')">
+            <i data-lucide="bar-chart-2"></i><div><p>Analytics</p><span>Visual breakdown</span></div>
+          </a>
+          <a href="tips.html" class="nav_item" onclick="navigate(event,'tips.html')">
+            <i data-lucide="lightbulb"></i><div><p>Tips</p><span>Budget advice</span></div>
+          </a>
+        </nav>
+
+        <a href="login.html" class="logout" onclick="navigate(event,'login.html')">
+          <i data-lucide="log-out"></i><p>Log Out</p>
+        </a>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar_logo">🎓 CHA-CHING</div>
+
+        <div class="sidebar_user">
+          <div class="user_avatar">G</div>
+          <div>
+            <p class="user_name">Guest</p>
+            <p class="user_status">Active session</p>
+          </div>
+        </div>
+
+        <p class="menu_label">MENU</p>
+
+        <nav class="sidebar_nav">
+          <a href="dashboard.html" class="nav_item" data-page="dashboard" onclick="navigate(event,'dashboard.html')">
+            <i data-lucide="layout-dashboard"></i>
+            <div>
+              <p>Dashboard</p>
+              <span>Overview</span>
+            </div>
+          </a>
+          <a href="expenses.html" class="nav_item active" data-page="expenses" onclick="navigate(event,'expenses.html')">
+            <i data-lucide="receipt-cent"></i>
+            <div>
+              <p>Expenses</p>
+              <span>Track spending</span>              
+            </div>
+            <div class="nav_indicator"></div>
+          </a>
+          <a href="analytics.html" class="nav_item" data-page="analytics" onclick="navigate(event,'analytics.html')">
+            <i data-lucide="bar-chart-2"></i>
+            <div>
+              <p>Analytics</p>
+              <span>Visual breakdown</span>
+            </div>
+          </a>
+          <a href="tips.html" class="nav_item" data-page="tips" onclick="navigate(event,'tips.html')">
+            <i data-lucide="lightbulb"></i>
+            <div>
+              <p>Tips</p>
+              <span>Budget advice</span>
+            </div>
+          </a>
+        </nav>
+
+        <div class="budget_health">
+          <div class="budget_health_title">
+            BUDGET HEALTH <span id="bh_status">— Not Set</span>
+          </div>
+          <div id="bh_bar_wrap" style="display:none" class="bh_bar_wrap">
+            <div class="bh_bar_bg">
+              <div id="bh_bar_fill" class="bh_bar_fill"></div>
+            </div>
+          </div>
+          <p class="budget_health_sub" id="bh_sub">Set your allowance to track health</p>
+        </div>
+
+        <a href="login.html" class="logout" onclick="navigate(event,'login.html')">
+          <i data-lucide="log-out"></i>
+          <p>Log Out</p>
+        </a>
+
+        <p class="sidebar_footer">Built for students 🎓</p>
+      </aside>
+
+      <!--MAIN CONTENT-->
+      <main>
+        <!--EXPENSES PAGE-->
+        <div id="page_expenses" class="page">
+          <div class="page_inner">
+          <div class="page_header">
+            <div>
+              <h1 class="page_title">Expenses</h1>
+              <p class="page_sub" id="page_sub">0 total · ₵0.00 spent</p>
+            </div>
+            <button class="add_btn" onclick="openModal()">+ Add Expense</button>
+          </div>
+
+          <div class="card">
+            <div class="search_wrap">
+              <i data-lucide="search"></i>
+              <input type="text" id="search_input" placeholder="Search expenses..." oninput="renderExpenses()" />
+            </div>
+            <div class="filter_row" id="filter_row">
+              <!--<button class="filter_btn active">All (0)</button>
+              <button class="filter_btn">Food</button>
+              <button class="filter_btn">Transport</button>
+              <button class="filter_btn">Entertainment</button>-->
+            </div>
+            <div class="sort_row">
+              <i data-lucide="filter"></i>
+              <span>Sort by:</span>
+              <button class="sort_btn active" id="sort_date" onclick="setSort('date')">Date</button>
+              <button class="sort_btn" id="sort_amount" onclick="setSort('amount')">Amount</button>
+            </div>
+          </div>
+ 
+          <!--<div class="card no_expenses">
+            <div class="no_expenses_icon">
+              <i data-lucide="receipt-cent"></i>
+            </div>
+            <p class="no_expenses_title">No expenses yet</p>
+            <p class="no_expenses_sub">Add your first expense to get started</p>
+          </div>
+          </div>
+        </div>-->
+      <!-- EXPENSE LIST -->
+            <div id="expense_list_wrap"></div>
+ 
+            <!-- FOOTER SUMMARY -->
+            <div class="list_footer" id="list_footer" style="display:none">
+              <span id="showing_label">Showing 0 expenses</span>
+              <span id="total_label">Total: <strong>₵0.00</strong></span>
+            </div>
+ 
+          </div>
+        </div>
+      </main>
+ 
+      <!-- ADD EXPENSE MODAL -->
+      <div class="modal_overlay" id="modal_overlay" style="display:none" onclick="closeModalOutside(event)">
+        <div class="modal">
+          <div class="modal_header">
+            <h2>Add Expense</h2>
+            <button class="modal_close" onclick="closeModal()">✕</button>
+          </div>
+          <div class="modal_body">
+            <div class="field">
+              <label>Category</label>
+              <select class="input_wrap" id="modal_category">
+                <option>🍔 Food</option>
+                <option>🚌 Transport</option>
+                <option>🎮 Entertainment</option>
+                <option>📚 Education</option>
+                <option>🏠 Housing</option>
+                <option>💊 Health</option>
+                <option>👗 Clothing</option>
+                <option>📦 Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Amount (₵)</label>
+              <input class="input_wrap" type="number" id="modal_amount" placeholder="0.00" min="0" step="0.01" />
+            </div>
+            <div class="field">
+              <label>Description (optional)</label>
+              <input class="input_wrap" type="text" id="modal_desc" placeholder="e.g. Lunch at cafeteria" />
+            </div>
+            <button class="submit_btn" onclick="addExpense()">+ Add Expense</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE BOTTOM TAB BAR -->
+      <nav class="mobile_bottom_nav">
+        <a href="dashboard.html" class="tab_item" onclick="navigate(event,'dashboard.html')">
+          <i data-lucide="layout-dashboard"></i><span>Home</span>
+        </a>
+        <a href="expenses.html" class="tab_item active" onclick="navigate(event,'expenses.html')">
+          <i data-lucide="receipt-cent"></i><span>Expenses</span>
+        </a>
+        <a href="analytics.html" class="tab_item" onclick="navigate(event,'analytics.html')">
+          <i data-lucide="bar-chart-2"></i><span>Analytics</span>
+        </a>
+        <a href="tips.html" class="tab_item" onclick="navigate(event,'tips.html')">
+          <i data-lucide="lightbulb"></i><span>Tips</span>
+        </a>
+      </nav>
+
+ 
+    </div>
+ 
+    <script>
+      lucide.createIcons();
+
+      // ── Force same-tab navigation ──
+      function navigate(e, url) {
+        e.preventDefault();
+        window.location.href = url;
+      }
+      function toggleDrawer() {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('drawer_overlay').classList.toggle('open');
+      }
+ 
+      // ── State from localStorage ── 
+      let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+      let budget   = parseFloat(localStorage.getItem('budget')) || 0;
+      let period   = localStorage.getItem('period') || 'weekly';
+ 
+      let activeFilter = 'all';
+      let activeSort   = 'date';
+ 
+      const COLORS = {
+        Food:'#6366f1', Transport:'#22c55e', Entertainment:'#f59e0b',
+        Education:'#3b82f6', Housing:'#8b5cf6', Health:'#ec4899',
+        Clothing:'#f97316', Other:'#6b7280'
+      };
+ 
+      const CATEGORY_OPTIONS = ['Food','Transport','Entertainment','Education','Housing','Health','Clothing','Other'];
+ 
+      // ── Sidebar budget health ──
+      function updateSidebar() {
+        if (!budget) return;
+        const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+        const pct = Math.min((totalSpent / budget) * 100, 100);
+        const color = pct >= 90 ? '#ef4444' : pct >= 75 ? '#f59e0b' : '#22c55e';
+        const label = pct >= 90 ? 'Critical' : pct >= 75 ? 'Near Limit' : 'Healthy';
+        document.getElementById('bh_status').textContent = `— ${label}`;
+        document.getElementById('bh_status').style.color = color;
+        document.getElementById('bh_bar_wrap').style.display = 'block';
+        document.getElementById('bh_bar_fill').style.width      = `${pct}%`;
+        document.getElementById('bh_bar_fill').style.background = color;
+        document.getElementById('bh_sub').textContent =
+          `₵${totalSpent.toFixed(2)} spent · ₵${budget.toFixed(2)} total`;
+      }
+ 
+      // ── Build filter buttons ──
+      function buildFilters() {
+        const cats = [...new Set(expenses.map(e => e.category))];
+        const row  = document.getElementById('filter_row');
+        const allCount = expenses.length;
+ 
+        let html = `<button class="filter_btn ${activeFilter==='all'?'active':''}" onclick="setFilter('all')">All (${allCount})</button>`;
+        CATEGORY_OPTIONS.forEach(cat => {
+          if (cats.includes(cat)) {
+            const count = expenses.filter(e => e.category === cat).length;
+            const emoji = expenses.find(e => e.category === cat)?.categoryFull?.split(' ')[0] || '';
+            html += `<button class="filter_btn ${activeFilter===cat?'active':''}" onclick="setFilter('${cat}')">${emoji} ${cat} (${count})</button>`;
+          }
+        });
+        row.innerHTML = html;
+      }
+ 
+      // ── Render expense list ──
+      function renderExpenses() {
+        const query = document.getElementById('search_input').value.toLowerCase();
+ 
+        let list = [...expenses];
+ 
+        // Filter by category
+        if (activeFilter !== 'all') {
+          list = list.filter(e => e.category === activeFilter);
+        }
+ 
+        // Search
+        if (query) {
+          list = list.filter(e =>
+            e.desc.toLowerCase().includes(query) ||
+            e.category.toLowerCase().includes(query)
+          );
+        }
+ 
+        // Sort
+        if (activeSort === 'amount') {
+          list.sort((a, b) => b.amount - a.amount);
+        } else {
+          // Keep insertion order (newest first = reverse)
+          list.reverse();
+        }
+ 
+        const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+        const filteredTotal = list.reduce((s, e) => s + e.amount, 0);
+ 
+        // Page subtitle
+        document.getElementById('page_sub').textContent =
+          `${expenses.length} total · ₵${totalSpent.toFixed(2)} spent`;
+ 
+        const wrap = document.getElementById('expense_list_wrap');
+        const footer = document.getElementById('list_footer');
+ 
+        if (list.length === 0) {
+          wrap.innerHTML = `
+            <div class="card no_expenses">
+              <div class="no_expenses_icon"><i data-lucide="receipt-cent"></i></div>
+              <p class="no_expenses_title">No expenses yet</p>
+              <p class="no_expenses_sub">Add your first expense to get started</p>
+            </div>`;
+          footer.style.display = 'none';
+          lucide.createIcons();
+          return;
+        }
+ 
+        wrap.innerHTML = list.map((e, i) => {
+          const realIndex = expenses.indexOf(e);
+          const color = COLORS[e.category] || '#6b7280';
+          const isToday = e.date === new Date().toLocaleDateString('en-US', { month:'short', day:'numeric' });
+          const dateLabel = isToday ? 'Today' : e.date;
+          return `
+            <div class="expense_card">
+              <div class="expense_icon_wrap" style="background:${color}22">
+                <span style="font-size:20px">${e.categoryFull?.split(' ')[0] || '📦'}</span>
+              </div>
+              <div class="expense_info">
+                <p class="expense_desc">${e.desc}</p>
+                <div class="expense_tags">
+                  <span class="expense_tag" style="background:${color}22; color:${color}">${e.category}</span>
+                  <span class="expense_date">${dateLabel}</span>
+                </div>
+              </div>
+              <p class="expense_amount" style="color:${color}">₵${e.amount.toFixed(2)}</p>
+              <button class="delete_btn" onclick="deleteExpense(${realIndex})" title="Delete">🗑</button>
+            </div>`;
+        }).join('');
+ 
+        footer.style.display = 'flex';
+        document.getElementById('showing_label').textContent =
+          `Showing ${list.length} expense${list.length !== 1 ? 's' : ''}`;
+        document.getElementById('total_label').innerHTML =
+          `Total: <strong style="color:#1a3a6e">₵${filteredTotal.toFixed(2)}</strong>`;
+ 
+        lucide.createIcons();
+      }
+ 
+      function setFilter(cat) {
+        activeFilter = cat;
+        buildFilters();
+        renderExpenses();
+      }
+ 
+      function setSort(s) {
+        activeSort = s;
+        document.getElementById('sort_date').classList.toggle('active', s === 'date');
+        document.getElementById('sort_amount').classList.toggle('active', s === 'amount');
+        renderExpenses();
+      }
+ 
+      // ── Add Expense ──
+      function addExpense() {
+        const categoryFull = document.getElementById('modal_category').value;
+        const amount       = parseFloat(document.getElementById('modal_amount').value);
+        const desc         = document.getElementById('modal_desc').value.trim();
+ 
+        if (!amount || amount <= 0) return alert('Please enter a valid amount.');
+ 
+        expenses.push({
+          category:     categoryFull.replace(/^\S+\s/, ''),
+          categoryFull: categoryFull,
+          amount,
+          desc: desc || 'No description',
+          date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric' })
+        });
+ 
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+ 
+        // Clear modal inputs
+        document.getElementById('modal_amount').value = '';
+        document.getElementById('modal_desc').value   = '';
+        closeModal();
+        buildFilters();
+        renderExpenses();
+        updateSidebar();
+      }
+ 
+      // ── Delete Expense ──
+      function deleteExpense(index) {
+        if (!confirm('Delete this expense?')) return;
+        expenses.splice(index, 1);
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        buildFilters();
+        renderExpenses();
+        updateSidebar();
+      }
+ 
+      // ── Modal ──
+      function openModal()  { document.getElementById('modal_overlay').style.display = 'flex'; }
+      function closeModal() { document.getElementById('modal_overlay').style.display = 'none'; }
+      function closeModalOutside(e) { if (e.target.id === 'modal_overlay') closeModal(); }
+ 
+      // ── Init ──
+      updateSidebar();
+      buildFilters();
+      renderExpenses();
+    </script>
+</body>
+</html>
