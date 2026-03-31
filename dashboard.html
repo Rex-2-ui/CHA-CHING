@@ -534,17 +534,50 @@
         });
 
       // ─── RESET ───
-      document.querySelector(".hero_reset").addEventListener("click", () => {
-        if (!confirm("Reset all data?")) return;
-        localStorage.clear();
-        budget = 0;
-        expenses = [];
-        period = "weekly";
-        document
-          .querySelectorAll(".toggle_btn")
-          .forEach((b, i) => b.classList.toggle("active", i === 0));
-        updateDashboard();
-      });
+     document.querySelector(".hero_reset").addEventListener("click", () => {
+  if (!confirm("Reset all data?")) return;
+
+  // Clear storage
+  localStorage.clear();
+
+  // Reset variables
+  budget = 0;
+  expenses = [];
+  period = "weekly";
+
+  // Reset toggle buttons
+  document
+    .querySelectorAll(".toggle_btn")
+    .forEach((b, i) => b.classList.toggle("active", i === 0));
+
+  // Reset input field
+  document.querySelector('#setup_card input[type="number"]').value = "";
+
+  // Hide stats and show setup
+  document.getElementById("stats_cards").style.display = "none";
+  document.getElementById("budget_alert").style.display = "none";
+  document.getElementById("hero_progress_wrap").style.display = "none";
+  document.getElementById("spending_by_category").style.display = "none";
+
+  // Show hint, hide setup form initially
+  document.getElementById("setup_card").style.display = "none";
+  document.getElementById("hint_card").style.display = "flex";
+
+  // Reset hero text
+  document.querySelector(".hero_sub").textContent =
+    "Set up your budget to start smart financial tracking";
+  document.querySelector(".hero_cta").textContent = "Set Up Budget ➔";
+
+  // Reset sidebar budget health
+  document.getElementById("bh_status").textContent = "— Not Set";
+  document.getElementById("bh_status").style.color = "";
+  document.getElementById("bh_bar_wrap").style.display = "none";
+  document.getElementById("bh_sub").textContent =
+    "Set your allowance to track health";
+
+  // Scroll back to top
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
       // ─── TOGGLE QUICK ADD FORM ───
       function toggleExpense() {
